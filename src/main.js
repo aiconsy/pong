@@ -12,7 +12,7 @@ let state = createState();
 
 const pauseOverlayEl = document.getElementById('pause-overlay');
 const themeSelectEl = document.getElementById('theme-select');
-const levelSelectEl = document.getElementById('speed-level');
+const levelSelectEl = document.getElementById('level-select');
 
 const stationSelectEl = document.getElementById('station-select');
 const stationUrlEl = document.getElementById('station-url');
