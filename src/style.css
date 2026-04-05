@@ -40,10 +40,109 @@ canvas {
   background: #16213e;
 }
 
+#controls {
+  margin: 0.8rem auto 0;
+  width: 800px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.8rem;
+  text-align: left;
+}
+
+.control-card {
+  border: 1px solid #2c2c45;
+  background: rgba(22, 33, 62, 0.7);
+  border-radius: 8px;
+  padding: 0.8rem;
+}
+
+.control-card h2 {
+  font-size: 1rem;
+  margin-bottom: 0.5rem;
+  color: #eee;
+  letter-spacing: 0.08rem;
+  text-transform: uppercase;
+}
+
+.row {
+  display: grid;
+  grid-template-columns: 140px 1fr auto;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.row label {
+  color: #bbb;
+  font-size: 0.9rem;
+}
+
+select,
+input[type='url'],
+button {
+  height: 34px;
+  border-radius: 6px;
+  border: 1px solid #2c2c45;
+  background: #0f3460;
+  color: #eee;
+  padding: 0 0.6rem;
+}
+
+button {
+  cursor: pointer;
+  border-color: #e94560;
+}
+
+button:hover {
+  filter: brightness(1.05);
+}
+
+audio {
+  width: 100%;
+}
+
 #instructions {
   margin-top: 0.8rem;
   font-size: 0.9rem;
   color: #aaa;
+}
+
+.hint {
+  color: #aaa;
+  font-size: 0.85rem;
+}
+
+#pause-overlay {
+  position: fixed;
+  inset: 0;
+  display: none;
+  background: rgba(0, 0, 0, 0.65);
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+}
+
+#pause-overlay.visible {
+  display: flex;
+}
+
+#pause-overlay_card {
+  width: min(640px, 92vw);
+  padding: 2rem;
+  border-radius: 12px;
+  border: 1px solid #2c2c45;
+  background: rgba(22, 33, 62, 0.95);
+  text-align: center;
+}
+
+#pause-title {
+  font-size: 2rem;
+  color: #e94560;
+  margin-bottom: 0.5rem;
+}
+
+#pause-subtitle {
+  color: #bbb;
 }
 
 kbd {
