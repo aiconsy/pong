@@ -32,6 +32,43 @@ html[data-theme='light'] {
   --hint: #4b5563;
   --label: #374151;
   --kbd-bg: #e5e7eb;
+  --canvas-outline: #9aa1b6;
+}
+
+html[data-theme='dark'] {
+  --canvas-outline: transparent;
+}
+
+html[data-theme='terminal'] {
+  --bg: #08130a;
+  --text: #e7ffe9;
+  --accent: #19ff6a;
+  --panel-bg: rgba(7, 18, 10, 0.8);
+  --panel-border: #0e4a22;
+  --canvas-bg: #061108;
+  --paddle: #19ff6a;
+  --midline: #0e4a22;
+  --input-bg: #061108;
+  --hint: #9dd9ad;
+  --label: #c3ffd0;
+  --kbd-bg: #0e4a22;
+  --canvas-outline: transparent;
+}
+
+html[data-theme='midnight'] {
+  --bg: #0a0b18;
+  --text: #f4f5ff;
+  --accent: #22d3ee;
+  --panel-bg: rgba(12, 14, 34, 0.8);
+  --panel-border: #2b2f6e;
+  --canvas-bg: #090a1a;
+  --paddle: #a78bfa;
+  --midline: #2b2f6e;
+  --input-bg: #0c0e22;
+  --hint: #c7c9ee;
+  --label: #d8daf9;
+  --kbd-bg: #2b2f6e;
+  --canvas-outline: transparent;
 }
 
 body {
@@ -68,6 +105,8 @@ canvas {
   border: 2px solid var(--accent);
   border-radius: 4px;
   background: var(--canvas-bg);
+  outline: 2px solid var(--canvas-outline);
+  outline-offset: -2px;
 }
 
 #controls {
