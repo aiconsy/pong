@@ -7,6 +7,7 @@ export default [
       globals: {
         document: 'readonly',
         window: 'readonly',
+        localStorage: 'readonly',
         requestAnimationFrame: 'readonly',
         console: 'readonly',
         Math: 'readonly',

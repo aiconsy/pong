@@ -11,12 +11,67 @@ const aiScoreEl = document.getElementById('ai-score');
 let state = createState();
 
 const pauseOverlayEl = document.getElementById('pause-overlay');
+const themeSelectEl = document.getElementById('theme-select');
+const levelSelectEl = document.getElementById('level-select');
 
 const stationSelectEl = document.getElementById('station-select');
 const stationUrlEl = document.getElementById('station-url');
 const stationLoadEl = document.getElementById('station-load');
 const radioAudioEl = document.getElementById('radio-audio');
 const radioStatusEl = document.getElementById('radio-status');
+
+const THEME_STORAGE_KEY = 'pong:theme';
+const LEVEL_STORAGE_KEY = 'pong:level';
+
+const themes = [
+  { id: 'dark', name: 'Dark (default)' },
+  { id: 'light', name: 'Light' },
+  { id: 'terminal', name: 'Terminal green' },
+  { id: 'midnight', name: 'Midnight neon' },
+];
+
+const levels = [
+  { id: 'doing_just_enough', name: 'Doing just enough', speed: 0.85 },
+  { id: 'in_a_meeting', name: 'In a meeting', speed: 1.0 },
+  { id: 'deep_work', name: 'Deep work', speed: 1.25 },
+  { id: 'productivity_theater', name: 'Productivity theater', speed: 1.6 },
+];
+
+function applyTheme(themeId) {
+  const resolved = themes.some((t) => t.id === themeId) ? themeId : 'dark';
+  document.documentElement.setAttribute('data-theme', resolved);
+  localStorage.setItem(THEME_STORAGE_KEY, resolved);
+}
+
+function applyLevel(levelId) {
+  const level = levels.find((l) => l.id === levelId) ?? levels[1];
+  state.speedMultiplier = level.speed;
+  localStorage.setItem(LEVEL_STORAGE_KEY, level.id);
+}
+
+function populateSelect(selectEl, options) {
+  selectEl.innerHTML = '';
+  for (const optData of options) {
+    const opt = document.createElement('option');
+    opt.value = optData.id;
+    opt.textContent = optData.name;
+    selectEl.appendChild(opt);
+  }
+}
+
+populateSelect(themeSelectEl, themes);
+populateSelect(levelSelectEl, levels);
+
+const storedTheme = localStorage.getItem(THEME_STORAGE_KEY) || 'dark';
+themeSelectEl.value = storedTheme;
+applyTheme(storedTheme);
+
+const storedLevel = localStorage.getItem(LEVEL_STORAGE_KEY) || 'in_a_meeting';
+levelSelectEl.value = storedLevel;
+applyLevel(storedLevel);
+
+themeSelectEl.addEventListener('change', () => applyTheme(themeSelectEl.value));
+levelSelectEl.addEventListener('change', () => applyLevel(levelSelectEl.value));
 
 const stations = [
   { name: 'SomaFM Groove Salad', url: 'https://ice1.somafm.com/groovesalad-128-mp3' },
@@ -74,6 +129,7 @@ radioAudioEl.addEventListener('error', () => setRadioStatus('Failed to load stre
 
 let paused = false;
 let resumeRunningAfterPause = false;
+let resumeRadioAfterPause = false;
 
 function setPaused(enabled) {
   paused = enabled;
@@ -82,8 +138,15 @@ function setPaused(enabled) {
   if (enabled) {
     resumeRunningAfterPause = state.running;
     state.running = false;
+    resumeRadioAfterPause = !radioAudioEl.paused;
+    if (resumeRadioAfterPause) radioAudioEl.pause();
   } else if (resumeRunningAfterPause) {
     state.running = true;
+    if (resumeRadioAfterPause) {
+      void radioAudioEl.play().catch(() => {
+        // Autoplay policies may block; user can press play manually.
+      });
+    }
   }
 }
 

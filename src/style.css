@@ -4,9 +4,39 @@
   box-sizing: border-box;
 }
 
+html[data-theme='dark'] {
+  --bg: #1a1a2e;
+  --text: #eee;
+  --accent: #e94560;
+  --panel-bg: rgba(22, 33, 62, 0.7);
+  --panel-border: #2c2c45;
+  --canvas-bg: #16213e;
+  --paddle: #0f3460;
+  --midline: #334;
+  --input-bg: #0f3460;
+  --hint: #aaa;
+  --label: #bbb;
+  --kbd-bg: #333;
+}
+
+html[data-theme='light'] {
+  --bg: #f7f7fb;
+  --text: #101014;
+  --accent: #7c3aed;
+  --panel-bg: rgba(255, 255, 255, 0.85);
+  --panel-border: #d6d6e7;
+  --canvas-bg: #ffffff;
+  --paddle: #2563eb;
+  --midline: #d6d6e7;
+  --input-bg: #ffffff;
+  --hint: #4b5563;
+  --label: #374151;
+  --kbd-bg: #e5e7eb;
+}
+
 body {
-  background: #1a1a2e;
-  color: #eee;
+  background: var(--bg);
+  color: var(--text);
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   display: flex;
   justify-content: center;
@@ -23,7 +53,7 @@ h1 {
   margin-bottom: 0.4rem;
   letter-spacing: 0.3rem;
   text-transform: uppercase;
-  color: #e94560;
+  color: var(--accent);
 }
 
 #scoreboard {
@@ -35,9 +65,9 @@ h1 {
 canvas {
   display: block;
   margin: 0 auto;
-  border: 2px solid #e94560;
+  border: 2px solid var(--accent);
   border-radius: 4px;
-  background: #16213e;
+  background: var(--canvas-bg);
 }
 
 #controls {
@@ -50,8 +80,8 @@ canvas {
 }
 
 .control-card {
-  border: 1px solid #2c2c45;
-  background: rgba(22, 33, 62, 0.7);
+  border: 1px solid var(--panel-border);
+  background: var(--panel-bg);
   border-radius: 8px;
   padding: 0.8rem;
 }
@@ -59,7 +89,7 @@ canvas {
 .control-card h2 {
   font-size: 1rem;
   margin-bottom: 0.5rem;
-  color: #eee;
+  color: var(--text);
   letter-spacing: 0.08rem;
   text-transform: uppercase;
 }
@@ -73,7 +103,7 @@ canvas {
 }
 
 .row label {
-  color: #bbb;
+  color: var(--label);
   font-size: 0.9rem;
 }
 
@@ -82,15 +112,15 @@ input[type='url'],
 button {
   height: 34px;
   border-radius: 6px;
-  border: 1px solid #2c2c45;
-  background: #0f3460;
-  color: #eee;
+  border: 1px solid var(--panel-border);
+  background: var(--input-bg);
+  color: var(--text);
   padding: 0 0.6rem;
 }
 
 button {
   cursor: pointer;
-  border-color: #e94560;
+  border-color: var(--accent);
 }
 
 button:hover {
@@ -104,11 +134,11 @@ audio {
 #instructions {
   margin-top: 0.8rem;
   font-size: 0.9rem;
-  color: #aaa;
+  color: var(--hint);
 }
 
 .hint {
-  color: #aaa;
+  color: var(--hint);
   font-size: 0.85rem;
 }
 
@@ -130,23 +160,23 @@ audio {
   width: min(640px, 92vw);
   padding: 2rem;
   border-radius: 12px;
-  border: 1px solid #2c2c45;
-  background: rgba(22, 33, 62, 0.95);
+  border: 1px solid var(--panel-border);
+  background: color-mix(in srgb, var(--panel-bg) 85%, black 15%);
   text-align: center;
 }
 
 #pause-title {
   font-size: 2rem;
-  color: #e94560;
+  color: var(--accent);
   margin-bottom: 0.5rem;
 }
 
 #pause-subtitle {
-  color: #bbb;
+  color: var(--label);
 }
 
 kbd {
-  background: #333;
+  background: var(--kbd-bg);
   padding: 0.1rem 0.4rem;
   border-radius: 3px;
   font-family: monospace;
