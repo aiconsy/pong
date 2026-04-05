@@ -102,6 +102,7 @@ window.addEventListener('keydown', (e) => {
   }
   if (e.key === 'Enter') {
     if (document.activeElement === stationUrlEl) return;
+    if (state.winner) return;
     setPaused(!paused);
   }
 });
