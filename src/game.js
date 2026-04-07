@@ -128,12 +128,16 @@ export function draw(ctx, state) {
   ctx.fill();
 
   if (state.winner) {
+    let winnerText = state.winner === 'player' ? 'You Win!' : 'AI Wins!';
+    if (state.mode === 'two-player') {
+      winnerText = state.winner === 'player' ? 'Left Player Wins!' : 'Right Player Wins!';
+    }
     ctx.fillStyle = 'rgba(0,0,0,0.6)';
     ctx.fillRect(0, 0, CANVAS_W, CANVAS_H);
     ctx.fillStyle = '#e94560';
     ctx.font = 'bold 48px sans-serif';
     ctx.textAlign = 'center';
-    ctx.fillText(state.winner === 'player' ? 'You Win!' : 'AI Wins!', CANVAS_W / 2, CANVAS_H / 2 - 10);
+    ctx.fillText(winnerText, CANVAS_W / 2, CANVAS_H / 2 - 10);
     ctx.font = '20px sans-serif';
     ctx.fillStyle = '#aaa';
     ctx.fillText('Press Space to play again', CANVAS_W / 2, CANVAS_H / 2 + 30);
