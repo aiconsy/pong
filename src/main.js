@@ -13,6 +13,7 @@ let state = createState();
 const pauseOverlayEl = document.getElementById('pause-overlay');
 const themeSelectEl = document.getElementById('theme-select');
 const levelSelectEl = document.getElementById('level-select');
+const modeSelectEl = document.getElementById('mode-select');
 
 const stationSelectEl = document.getElementById('station-select');
 const stationUrlEl = document.getElementById('station-url');
@@ -22,6 +23,7 @@ const radioStatusEl = document.getElementById('radio-status');
 
 const THEME_STORAGE_KEY = 'pong:theme';
 const LEVEL_STORAGE_KEY = 'pong:level';
+const MODE_STORAGE_KEY = 'pong:mode';
 
 const themes = [
   { id: 'dark', name: 'Dark (default)' },
@@ -37,6 +39,11 @@ const levels = [
   { id: 'productivity_theater', name: 'Productivity theater', speed: 1.6 },
 ];
 
+const modes = [
+  { id: 'solo', name: 'Solo (vs AI)' },
+  { id: 'duo', name: 'Duo (2 players)' },
+];
+
 function applyTheme(themeId) {
   const resolved = themes.some((t) => t.id === themeId) ? themeId : 'dark';
   document.documentElement.setAttribute('data-theme', resolved);
@@ -47,6 +54,12 @@ function applyLevel(levelId) {
   const level = levels.find((l) => l.id === levelId) ?? levels[1];
   state.speedMultiplier = level.speed;
   localStorage.setItem(LEVEL_STORAGE_KEY, level.id);
+}
+
+function applyMode(modeId) {
+  const mode = modes.find((m) => m.id === modeId) ?? modes[0];
+  state.mode = mode.id;
+  localStorage.setItem(MODE_STORAGE_KEY, mode.id);
 }
 
 function populateSelect(selectEl, options) {
@@ -61,6 +74,7 @@ function populateSelect(selectEl, options) {
 
 populateSelect(themeSelectEl, themes);
 populateSelect(levelSelectEl, levels);
+populateSelect(modeSelectEl, modes);
 
 const storedTheme = localStorage.getItem(THEME_STORAGE_KEY) || 'dark';
 themeSelectEl.value = storedTheme;
@@ -70,8 +84,13 @@ const storedLevel = localStorage.getItem(LEVEL_STORAGE_KEY) || 'in_a_meeting';
 levelSelectEl.value = storedLevel;
 applyLevel(storedLevel);
 
+const storedMode = localStorage.getItem(MODE_STORAGE_KEY) || 'solo';
+modeSelectEl.value = storedMode;
+applyMode(storedMode);
+
 themeSelectEl.addEventListener('change', () => applyTheme(themeSelectEl.value));
 levelSelectEl.addEventListener('change', () => applyLevel(levelSelectEl.value));
+modeSelectEl.addEventListener('change', () => applyMode(modeSelectEl.value));
 
 const stations = [
   { name: 'SomaFM Groove Salad', url: 'https://ice1.somafm.com/groovesalad-128-mp3' },
@@ -153,6 +172,9 @@ function setPaused(enabled) {
 const keys = {};
 window.addEventListener('keydown', (e) => {
   keys[e.key] = true;
+  if (['ArrowUp', 'ArrowDown', ' ', 'Enter'].includes(e.key)) {
+    e.preventDefault();
+  }
   if (e.key === ' ') {
     if (state.winner) {
       state = createState();
@@ -174,9 +196,17 @@ window.addEventListener('keyup', (e) => {
 });
 
 function gameLoop() {
-  if (keys['w'] || keys['W'] || keys['ArrowUp']) state.player.dy = -1;
-  else if (keys['s'] || keys['S'] || keys['ArrowDown']) state.player.dy = 1;
+  if (keys.w || keys.W) state.player.dy = -1;
+  else if (keys.s || keys.S) state.player.dy = 1;
   else state.player.dy = 0;
+
+  if (state.mode === 'duo') {
+    if (keys.ArrowUp) state.ai.dy = -1;
+    else if (keys.ArrowDown) state.ai.dy = 1;
+    else state.ai.dy = 0;
+  } else {
+    state.ai.dy = 0;
+  }
 
   update(state);
   draw(ctx, state);

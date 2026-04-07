@@ -58,6 +58,18 @@ describe('update', () => {
     expect(s.player.y).toBeGreaterThan(origY);
   });
 
+  it('moves right paddle in two-player mode based on dy', () => {
+    const s = createState();
+    s.running = true;
+    s.mode = 'two-player';
+    s.ai.dy = -1;
+    s.ball.y = s.ai.y;
+    s.ball.vy = 0;
+    const origY = s.ai.y;
+    update(s);
+    expect(s.ai.y).toBeLessThan(origY);
+  });
+
   it('scores for AI when ball passes left edge', () => {
     const s = createState();
     s.running = true;

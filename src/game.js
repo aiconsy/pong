@@ -18,6 +18,8 @@ export function createState() {
     score: { player: 0, ai: 0 },
     running: false,
     winner: null,
+    speedMultiplier: 1,
+    mode: 'ai',
   };
 }
 
@@ -47,16 +49,21 @@ export function update(state) {
   if (!state.running || state.winner) return;
 
   const { player, ai, ball, score } = state;
+  const speedMultiplier = state.speedMultiplier || 1;
 
-  player.y = clamp(player.y + player.dy * PADDLE_SPEED, 0, CANVAS_H - player.h);
+  player.y = clamp(player.y + player.dy * PADDLE_SPEED * speedMultiplier, 0, CANVAS_H - player.h);
 
-  const aiCenter = ai.y + ai.h / 2;
-  if (aiCenter < ball.y - 10) ai.y += AI_SPEED;
-  else if (aiCenter > ball.y + 10) ai.y -= AI_SPEED;
+  if (state.mode === 'two_player') {
+    ai.y = clamp(ai.y + ai.dy * PADDLE_SPEED * speedMultiplier, 0, CANVAS_H - ai.h);
+  } else {
+    const aiCenter = ai.y + ai.h / 2;
+    if (aiCenter < ball.y - 10) ai.y += AI_SPEED * speedMultiplier;
+    else if (aiCenter > ball.y + 10) ai.y -= AI_SPEED * speedMultiplier;
+  }
   ai.y = clamp(ai.y, 0, CANVAS_H - ai.h);
 
-  ball.x += ball.vx;
-  ball.y += ball.vy;
+  ball.x += ball.vx * speedMultiplier;
+  ball.y += ball.vy * speedMultiplier;
 
   if (ball.y - ball.size / 2 <= 0 || ball.y + ball.size / 2 >= CANVAS_H) {
     ball.vy *= -1;
